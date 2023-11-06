@@ -147,7 +147,7 @@ form.sign-in-form {
   font-weight: 600;
   margin: 10px 0;
   cursor: pointer;
-   transform: transition(0.5s);
+  transform: transition(0.5s);
 }
 
 .btn:hover {
@@ -173,7 +173,7 @@ form.sign-in-form {
   right: 48%;
   transform: translateY(-50%);
   background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%);
-   transform: transition(1.8s ease-in-out);
+  transform: transition(1.8s ease-in-out);
   border-radius: 50%;
   z-index: 6;
 }
