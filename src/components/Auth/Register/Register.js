@@ -11,39 +11,61 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const defaultValidInput = {
+    isValidEmail: true,
+    isValidPhone: true,
+    isValidPassword: true,
+    isValidConfirmPassword: true,
+  }
+  const [objectCheckInput, setObjectCheckInput] = useState(defaultValidInput);
+
+
   useEffect(() => {
-    // axios.get("http://localhost:8081/api/test").then((data) => {
-    //   console.log(">> Check Data", data);
+    // axios.post("http://localhost:8081/api/v1/register").then(() => {
+    //   console.log(">> Check Data");
     // });
+
   }, []);
-  const isValid = () => {
+  const isValidInput = () => {
+    setObjectCheckInput(defaultValidInput)
     if (!email) {
       toast.error("Email is required");
-      return false;
-    }
-    if (!phone) {
-      toast.error("Phone is required");
-      return false;
-    }
-    if (!password) {
-      toast.error("Password is required");
-      return false;
-    }
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      setObjectCheckInput({ ...defaultValidInput, isValidEmail: false })
       return false;
     }
     let regx = /\S+@\S+\.\S+/;
     if (!regx.test(email)) {
       toast.error("Invalid email address");
+      setObjectCheckInput({ ...defaultValidInput, isValidEmail: false })
+      return false;
+    }
+    if (!phone) {
+      toast.error("Phone is required");
+      setObjectCheckInput({ ...defaultValidInput, isValidPhone: false })
+      return false;
+    }
+    if (!phone.length >= 9) {
+      toast.error("Invalid phone number");
+      setObjectCheckInput({ ...defaultValidInput, isValidPhone: false })
+      return false;
+    }
+    if (!password) {
+      toast.error("Password is required");
+      setObjectCheckInput({ ...defaultValidInput, isValidPassword: false })
+      return false;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      setObjectCheckInput({ ...defaultValidInput, isValidPassword: false })
       return false;
     }
     return true
   }
   const handleRegister = () => {
-    let checkValid = isValid();
-    let userData = { email, phone, username, password, confirmPassword }
-    console.log(">>check user data", userData);
+    let checkValid = isValidInput();
+    checkValid === true && axios.post("http://localhost:8081/api/v1/register", {
+      email, phone, username, password
+    })
   }
   return (
     <Auth>
@@ -53,23 +75,34 @@ const Register = () => {
             <h2 className="title">Register</h2>
             <div className="input-field">
               <i className="fas fa-envelope"></i>
-              <input type="email" placeholder="Email Address" value={email} onChange={(event) => setEmail(event.target.value)} />
+              <input className=
+                {objectCheckInput.isValidEmail ? 'form-control' : 'form-control is-invalid'} 
+                type="text" placeholder="Email Address" 
+                value={email} onChange={(event) => setEmail(event.target.value)} />
             </div>
             <div className="input-field">
               <i className="fas fa-phone"></i>
-              <input type="text" placeholder="Phone Number" value={phone} onChange={(event) => setPhone(event.target.value)} />
+              <input className={objectCheckInput.isValidPhone ? 'form-control' : 'form-control is-invalid'}  
+              type="text" placeholder="Phone Number" 
+              value={phone} onChange={(event) => setPhone(event.target.value)} />
             </div>
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input type="text" placeholder="Username" value={username} onChange={(event) => setUseName(event.target.value)} />
+              <input className="form-control" 
+              type="text" placeholder="Username" 
+              value={username} onChange={(event) => setUseName(event.target.value)} />
             </div>
             <div className="input-field">
               <i className="fas fa-lock"></i>
-              <input type="password" placeholder="Password" value={password} onChange={(event) => setPassword(event.target.value)} />
+              <input className={objectCheckInput.isValidPassword ? 'form-control' : 'form-control is-invalid'} 
+              type="password" placeholder="Password" 
+              value={password} onChange={(event) => setPassword(event.target.value)} />
             </div>
             <div className="input-field">
               <i className="fas fa-unlock-alt"></i>
-              <input type="password" placeholder="Re-Enter Password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
+              <input className={objectCheckInput.isValidConfirmPassword ? 'form-control' : 'form-control is-invalid'} 
+              type="password" placeholder="Re-Enter Password" 
+              value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
             </div>
             <button type="submit" className="btn btn-primary" onClick={() => handleRegister()} >Register</button>
             <p className="social-text">Or Register with social platforms</p>
