@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import Auth from "../index";
 import "../index.scss";
 import { loginUser } from "../../../services/userService";
@@ -15,8 +16,8 @@ const Login = (props) => {
       isValidValuePassword: true
   }
   const [objectValidInput, setObjectValidInput] = useState(defaultValueInput)
-  const handleLogin = async ()=>{
-    
+  const handleLogin = async (e)=>{
+    e.preventDefault();
     setObjectValidInput(defaultValueInput)
     if(!valueLogin){
       setObjectValidInput({ ...defaultValueInput, isValidValueLogin: false })
@@ -37,12 +38,19 @@ const Login = (props) => {
       sessionStorage.setItem('account', JSON.stringify(data))
       toast.success('Successfully logged in')
       history.push('/users')
+      window.location.reload()
       //successfully logged in
     }
     if(response && response.data && +response.data.EC !== 0){
       toast.error(response.data.EM)
     }
   }
+  useEffect(()=>{
+    let session = sessionStorage.getItem('account')
+    if (session) {
+      history.push('/')
+    }
+  },[])
   return (
     <Auth>
       <div className="forms-container">
@@ -63,7 +71,7 @@ const Login = (props) => {
               value={password}
               onChange={(event)=>setPassword(event.target.value)}/>
             </div>
-            <button type="submit" className="btn solid btn-primary" onClick={()=> handleLogin()} >Login</button>
+            <button type="submit" className="btn solid btn-primary" onClick={(e)=> handleLogin(e)} >Login</button>
             <p className="social-text">Or Login with social platforms</p>
             <div className="social-media">
               <a href="/" className="social-icon">
