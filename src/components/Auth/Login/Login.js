@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Auth from "../index";
 import "../index.scss";
 import { loginUser } from "../../../services/userService";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
 
 
@@ -12,25 +12,25 @@ const Login = (props) => {
   const [valueLogin, setValueLogin] = useState('')
   const [password, setPassword] = useState('')
   const defaultValueInput = {
-      isValidValueLogin: true,
-      isValidValuePassword: true
+    isValidValueLogin: true,
+    isValidValuePassword: true
   }
   const [objectValidInput, setObjectValidInput] = useState(defaultValueInput)
-  const handleLogin = async (e)=>{
+  const handleLogin = async (e) => {
     e.preventDefault();
     setObjectValidInput(defaultValueInput)
-    if(!valueLogin){
+    if (!valueLogin) {
       setObjectValidInput({ ...defaultValueInput, isValidValueLogin: false })
       toast.error('Please enter a your email address or phone number')
       return
     }
-    if(!password){
+    if (!password) {
       setObjectValidInput({ ...defaultValueInput, isValidValuePassword: false })
       toast.error('Please enter your password')
       return
     }
-    let response = await loginUser(valueLogin,password)
-    if(response && response.data && +response.data.EC === 0){
+    let response = await loginUser(valueLogin, password)
+    if (response && response.data && +response.data.EC === 0) {
       let data = {
         isAuthenticated: true,
         token: 'Fake token'
@@ -41,16 +41,16 @@ const Login = (props) => {
       window.location.reload()
       //successfully logged in
     }
-    if(response && response.data && +response.data.EC !== 0){
+    if (response && response.data && +response.data.EC !== 0) {
       toast.error(response.data.EM)
     }
   }
-  useEffect(()=>{
+  useEffect(() => {
     let session = sessionStorage.getItem('account')
     if (session) {
       history.push('/')
     }
-  },[])
+  }, [])
   return (
     <Auth>
       <div className="forms-container">
@@ -59,19 +59,19 @@ const Login = (props) => {
             <h2 className="title">Login</h2>
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input type="text" placeholder="Email Address or Phone Number" 
+              <input type="text" placeholder="Email Address or Phone"
                 className={objectValidInput.isValidValueLogin ? 'form-control' : 'is-invalid form-control'}
                 value={valueLogin}
-                onChange={(event) => setValueLogin(event.target.value)}/>
+                onChange={(event) => setValueLogin(event.target.value)} />
             </div>
             <div className="input-field">
               <i className="fas fa-lock"></i>
-              <input type="password" placeholder="Password" 
-              className={objectValidInput.isValidValuePassword ? 'form-control' : 'is-invalid form-control'}
-              value={password}
-              onChange={(event)=>setPassword(event.target.value)}/>
+              <input type="password" placeholder="Password"
+                className={objectValidInput.isValidValuePassword ? 'form-control' : 'is-invalid form-control'}
+                value={password}
+                onChange={(event) => setPassword(event.target.value)} />
             </div>
-            <button type="submit" className="btn solid btn-primary" onClick={(e)=> handleLogin(e)} >Login</button>
+            <button type="submit" className="btn solid btn-primary" onClick={(e) => handleLogin(e)} >Login</button>
             <p className="social-text">Or Login with social platforms</p>
             <div className="social-media">
               <a href="/" className="social-icon">
