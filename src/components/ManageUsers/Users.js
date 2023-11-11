@@ -4,6 +4,7 @@ import { fetchAllUsers, deleteUser } from "../../services/userService";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
 import ModalDelete from "./ModalDelete";
+import ModalUser from "./ModalUser";
 const Users = (props) => {
   const [listUsers, setListUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -11,6 +12,7 @@ const Users = (props) => {
   const [totalPages, setTotalPages] = useState(0);
   const [dataModel, setDataModel] = useState({})
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  const [isShowModalUser, setIsShowModalUser] = useState(false);
   useEffect(() => {
     fetchUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,6 +51,10 @@ const Users = (props) => {
       toast.error(response.data.EM)
     }
   }
+
+  const onHideModalUser = () => {
+    setIsShowModalUser(false)
+  }
   return (
     <>
       <div>
@@ -61,7 +67,7 @@ const Users = (props) => {
               <button className="btn btn-success mx-2">
                 <i className="fa fa-refresh" aria-hidden="true"></i>
               </button>
-              <button className="btn btn-primary">
+              <button className="btn btn-primary" onClick={() => setIsShowModalUser(true)}>
                 <i className="fa fa-plus" aria-hidden="true"></i>Add New user
               </button>
             </div>
@@ -132,6 +138,7 @@ const Users = (props) => {
         </div>
       </div>
       <ModalDelete show={isShowModalDelete} handleClose={handleClose} confirmDeleteUser={confirmDeleteUser} dataModel={dataModel} />
+      <ModalUser show={isShowModalUser} title={'Create new users'} onHide={onHideModalUser} />
     </>
   );
 };

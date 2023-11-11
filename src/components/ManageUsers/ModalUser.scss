@@ -1,0 +1,51 @@
+@import '../Auth/variables';
+
+#contained-modal-title-vcenter {
+  .title {
+    font-family: 'Times New Roman', Times, serif;
+    font-style: italic;
+  }
+}
+
+.content-body {
+  &.row {
+    .input-field {
+      position: relative;
+
+      input.form-control {
+        padding-left: 30px;
+        border: var(--bs-border-width) solid var(--bs-border-color);
+        border-radius: 50px;
+        transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+      }
+
+      i {
+        color: $placeholder-text-color;
+        font-size: 1.1rem;
+        position: absolute;
+        left: 20px; // Điều chỉnh vị trí của biểu tượng bên trong ô input
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .is-val {
+        .red {
+          color: red;
+        }
+        position: absolute;
+        right: 20px; // Điều chỉnh vị trí của biểu tượng bên trong ô input
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+
+    .select {
+      position: relative;
+      label {
+        margin-bottom: 3px;
+        .red {
+          color: red;
+        }
+      }
+    }
+  }
+}
