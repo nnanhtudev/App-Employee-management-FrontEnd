@@ -8,11 +8,15 @@ import ModalUser from "./ModalUser";
 const Users = (props) => {
   const [listUsers, setListUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentLimit, setCurrentLimit] = useState(5);
+  const [currentLimit, setCurrentLimit] = useState(3);
   const [totalPages, setTotalPages] = useState(0);
-  const [dataModel, setDataModel] = useState({})
+  //ModalDelete
+  const [dataModal, setDataModal] = useState({})
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  // Modal CREATE/UPDATE Users 
   const [isShowModalUser, setIsShowModalUser] = useState(false);
+  const [actionModalUser, setActionModalUser] = useState('CREATE')
+  const [dataModalUser, setDataModalUser] = useState({})
   useEffect(() => {
     fetchUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -21,9 +25,10 @@ const Users = (props) => {
   const fetchUsers = async () => {
     // let response = await fetchAllUsers(page ? page : currentPage, currentLimit);
     let response = await fetchAllUsers(currentPage, currentLimit);
-    if (response && response.data && +response.data.EC === 0) {
-      setTotalPages(response.data.DT && response.data.DT.totalPages)
-      setListUsers(response.data.DT && response.data.DT.users)
+    console.log(response);
+    if (response && +response.EC === 0) {
+      setTotalPages(response.DT && response.DT.totalPages)
+      setListUsers(response.DT && response.DT.users)
     }
   };
 
@@ -34,26 +39,39 @@ const Users = (props) => {
   };
 
   const handleDelete = async (user) => {
-    setDataModel(user)
+    setDataModal(user)
     setIsShowModalDelete(true)
   }
-  const handleClose = () => {
-    setIsShowModalDelete(false)
-    setDataModel({})
-  };
+
   const confirmDeleteUser = async () => {
-    let response = await deleteUser(dataModel)
-    if (response && +response.data.EC === 0) {
-      toast.success(`${response.data.EM} have: ${dataModel.email}`)
+    let response = await deleteUser(dataModal)
+    if (response && +response.EC === 0) {
+      toast.success(`${response.EM} have: ${dataModal.email}`)
       await fetchUsers()
       setIsShowModalDelete(false)
     } else {
-      toast.error(response.data.EM)
+      toast.error(response.EM)
     }
   }
 
-  const onHideModalUser = () => {
+  const handleClose = () => {
+    setIsShowModalDelete(false)
+    setDataModal({})
+  };
+
+  const onHideModalUser = async () => {
     setIsShowModalUser(false)
+    setDataModalUser({})
+    await fetchUsers()
+  }
+
+  const handleEditUsers = (user) => {
+    setActionModalUser("UPDATE")
+    setDataModalUser(user)
+    setIsShowModalUser(true)
+  }
+  const handleRefresh = async () => {
+    await fetchUsers()
   }
   return (
     <>
@@ -61,13 +79,16 @@ const Users = (props) => {
         <div className="manage-users-container container mt-4">
           <div className="user-header">
             <div className="title">
-              <h1>Table Users</h1>
+              <h3>Manage user</h3>
             </div>
             <div className="action">
-              <button className="btn btn-success mx-2">
+              <button className="btn btn-success mx-2" onClick={() => handleRefresh()}>
                 <i className="fa fa-refresh" aria-hidden="true"></i>
               </button>
-              <button className="btn btn-primary" onClick={() => setIsShowModalUser(true)}>
+              <button className="btn btn-primary" onClick={() => {
+                setIsShowModalUser(true);
+                setActionModalUser("CREATE");
+              }}>
                 <i className="fa fa-plus" aria-hidden="true"></i>Add New user
               </button>
             </div>
@@ -88,13 +109,13 @@ const Users = (props) => {
                 {listUsers && listUsers.length > 0 ? (
                   listUsers.map((item, index) => (
                     <tr key={`row-${index}`}>
-                      <td>{index + 1}</td>
+                      <td>{(currentPage - 1) * currentLimit + index + 1}</td>
                       <td>{item.id}</td>
                       <td>{item.email}</td>
                       <td>{item.username}</td>
                       <td>{item.Group ? item.Group.name : ''}</td>
                       <td>
-                        <button className="btn btn-warning mx-2">
+                        <button className="btn btn-warning mx-2 " onClick={() => handleEditUsers(item)}>
                           <i className="fa fa-edit" aria-hidden="true"></i>
                         </button>
                         <button className="btn btn-danger" onClick={() => handleDelete(item)}>
@@ -137,8 +158,8 @@ const Users = (props) => {
           }
         </div>
       </div>
-      <ModalDelete show={isShowModalDelete} handleClose={handleClose} confirmDeleteUser={confirmDeleteUser} dataModel={dataModel} />
-      <ModalUser show={isShowModalUser} title={'Create new users'} onHide={onHideModalUser} />
+      <ModalDelete show={isShowModalDelete} handleClose={handleClose} confirmDeleteUser={confirmDeleteUser} dataModal={dataModal} />
+      <ModalUser show={isShowModalUser} onHide={onHideModalUser} action={actionModalUser} dataModalUser={dataModalUser} />
     </>
   );
 };

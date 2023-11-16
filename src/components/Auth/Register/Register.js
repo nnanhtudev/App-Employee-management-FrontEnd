@@ -66,13 +66,13 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     let checkValid = isValidInput();
-    if(checkValid === true){
-      let response = await  registerNewUser(email, phone, username, password)
-      let serverData = response.data;
-      if(+serverData.EC ===0){
+    if (checkValid === true) {
+      let response = await registerNewUser(email, phone, username, password)
+      let serverData = response;
+      if (+serverData.EC === 0) {
         toast.success("Account created successfully. Please Logged in!");
         history.push("/login");
-      }else{
+      } else {
         toast.error(serverData.EM);
       }
     }
@@ -86,33 +86,33 @@ const Register = () => {
             <div className="input-field">
               <i className="fas fa-envelope"></i>
               <input className=
-                {objectCheckInput.isValidEmail ? 'form-control' : 'form-control is-invalid'} 
-                type="text" placeholder="Email Address" 
+                {objectCheckInput.isValidEmail ? 'form-control' : 'form-control is-invalid'}
+                type="text" placeholder="Email Address"
                 value={email} onChange={(event) => setEmail(event.target.value)} />
             </div>
             <div className="input-field">
               <i className="fas fa-phone"></i>
-              <input className={objectCheckInput.isValidPhone ? 'form-control' : 'form-control is-invalid'}  
-              type="text" placeholder="Phone Number" 
-              value={phone} onChange={(event) => setPhone(event.target.value)} />
+              <input className={objectCheckInput.isValidPhone ? 'form-control' : 'form-control is-invalid'}
+                type="text" placeholder="Phone Number"
+                value={phone} onChange={(event) => setPhone(event.target.value)} />
             </div>
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input className="form-control" 
-              type="text" placeholder="Username" 
-              value={username} onChange={(event) => setUseName(event.target.value)} />
+              <input className="form-control"
+                type="text" placeholder="Username"
+                value={username} onChange={(event) => setUseName(event.target.value)} />
             </div>
             <div className="input-field">
               <i className="fas fa-lock"></i>
-              <input className={objectCheckInput.isValidPassword ? 'form-control' : 'form-control is-invalid'} 
-              type="password" placeholder="Password" 
-              value={password} onChange={(event) => setPassword(event.target.value)} />
+              <input className={objectCheckInput.isValidPassword ? 'form-control' : 'form-control is-invalid'}
+                type="password" placeholder="Password"
+                value={password} onChange={(event) => setPassword(event.target.value)} />
             </div>
             <div className="input-field">
               <i className="fas fa-unlock-alt"></i>
-              <input className={objectCheckInput.isValidConfirmPassword ? 'form-control' : 'form-control is-invalid'} 
-              type="password" placeholder="Re-Enter Password" 
-              value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
+              <input className={objectCheckInput.isValidConfirmPassword ? 'form-control' : 'form-control is-invalid'}
+                type="password" placeholder="Re-Enter Password"
+                value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
             </div>
             <button type="submit" className="btn btn-primary" onClick={(e) => handleRegister(e)} >Register</button>
             <p className="social-text">Or Register with social platforms</p>
