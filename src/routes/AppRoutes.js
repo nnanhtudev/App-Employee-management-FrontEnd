@@ -10,14 +10,14 @@ const AppRoutes = (props) => {
         <PrivateRoutes path="/users" component={Users} />
         <Route path="/login" component={Login}></Route>
         <Route path="/register" component={Register}></Route>
-        <Route path="/project">project</Route>
+        <Route path="/project">Project</Route>
         <Route exact path="/">
           Home
         </Route>
         <Route path="*">404 not found</Route>
       </Switch>
     </>
-  )
-}
+  );
+};
 
 export default AppRoutes;

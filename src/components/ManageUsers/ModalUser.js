@@ -34,7 +34,7 @@ const ModalUser = (props) => {
   const [validInputs, setValidInputs] = useState(validInputsDefault);
 
   useEffect(() => {
-    // getGroup();
+    getGroup();
   }, []);
 
   useEffect(() => {

@@ -11,68 +11,67 @@ const Users = (props) => {
   const [currentLimit, setCurrentLimit] = useState(3);
   const [totalPages, setTotalPages] = useState(0);
   //ModalDelete
-  const [dataModal, setDataModal] = useState({})
+  const [dataModal, setDataModal] = useState({});
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
-  // Modal CREATE/UPDATE Users 
+  // Modal CREATE/UPDATE Users
   const [isShowModalUser, setIsShowModalUser] = useState(false);
-  const [actionModalUser, setActionModalUser] = useState('CREATE')
-  const [dataModalUser, setDataModalUser] = useState({})
+  const [actionModalUser, setActionModalUser] = useState("CREATE");
+  const [dataModalUser, setDataModalUser] = useState({});
   useEffect(() => {
     fetchUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage]);
+  });
   // const fetchUsers = async (page)
   const fetchUsers = async () => {
     // let response = await fetchAllUsers(page ? page : currentPage, currentLimit);
     let response = await fetchAllUsers(currentPage, currentLimit);
-    console.log(response);
     if (response && +response.EC === 0) {
-      setTotalPages(response.DT && response.DT.totalPages)
-      setListUsers(response.DT && response.DT.users)
+      setTotalPages(response.DT && response.DT.totalPages);
+      setListUsers(response.DT && response.DT.users);
     }
   };
 
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
-    setCurrentPage(+event.selected + 1)
+    setCurrentPage(+event.selected + 1);
     // await fetchUsers(+event.selected + 1)
   };
 
   const handleDelete = async (user) => {
-    setDataModal(user)
-    setIsShowModalDelete(true)
-  }
+    setDataModal(user);
+    setIsShowModalDelete(true);
+  };
 
   const confirmDeleteUser = async () => {
-    let response = await deleteUser(dataModal)
+    let response = await deleteUser(dataModal);
     if (response && +response.EC === 0) {
-      toast.success(`${response.EM} have: ${dataModal.email}`)
-      await fetchUsers()
-      setIsShowModalDelete(false)
+      toast.success(`${response.EM} have: ${dataModal.email}`);
+      await fetchUsers();
+      setIsShowModalDelete(false);
     } else {
-      toast.error(response.EM)
+      toast.error(response.EM);
     }
-  }
+  };
 
   const handleClose = () => {
-    setIsShowModalDelete(false)
-    setDataModal({})
+    setIsShowModalDelete(false);
+    setDataModal({});
   };
 
   const onHideModalUser = async () => {
-    setIsShowModalUser(false)
-    setDataModalUser({})
-    await fetchUsers()
-  }
+    setIsShowModalUser(false);
+    setDataModalUser({});
+    await fetchUsers();
+  };
 
   const handleEditUsers = (user) => {
-    setActionModalUser("UPDATE")
-    setDataModalUser(user)
-    setIsShowModalUser(true)
-  }
+    setActionModalUser("UPDATE");
+    setDataModalUser(user);
+    setIsShowModalUser(true);
+  };
   const handleRefresh = async () => {
-    await fetchUsers()
-  }
+    await fetchUsers();
+  };
   return (
     <>
       <div>
@@ -85,10 +84,13 @@ const Users = (props) => {
               <button className="btn btn-success mx-2" onClick={() => handleRefresh()}>
                 <i className="fa fa-refresh" aria-hidden="true"></i>
               </button>
-              <button className="btn btn-primary" onClick={() => {
-                setIsShowModalUser(true);
-                setActionModalUser("CREATE");
-              }}>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setIsShowModalUser(true);
+                  setActionModalUser("CREATE");
+                }}
+              >
                 <i className="fa fa-plus" aria-hidden="true"></i>Add New user
               </button>
             </div>
@@ -113,7 +115,7 @@ const Users = (props) => {
                       <td>{item.id}</td>
                       <td>{item.email}</td>
                       <td>{item.username}</td>
-                      <td>{item.Group ? item.Group.name : ''}</td>
+                      <td>{item.Group ? item.Group.name : ""}</td>
                       <td>
                         <button className="btn btn-warning mx-2 " onClick={() => handleEditUsers(item)}>
                           <i className="fa fa-edit" aria-hidden="true"></i>
@@ -132,7 +134,7 @@ const Users = (props) => {
               </tbody>
             </table>
           </div>
-          {totalPages > 0 &&
+          {totalPages > 0 && (
             <div className="user-footer">
               <ReactPaginate
                 nextLabel="Next >"
@@ -155,11 +157,21 @@ const Users = (props) => {
                 renderOnZeroPageCount={null}
               />
             </div>
-          }
+          )}
         </div>
       </div>
-      <ModalDelete show={isShowModalDelete} handleClose={handleClose} confirmDeleteUser={confirmDeleteUser} dataModal={dataModal} />
-      <ModalUser show={isShowModalUser} onHide={onHideModalUser} action={actionModalUser} dataModalUser={dataModalUser} />
+      <ModalDelete
+        show={isShowModalDelete}
+        handleClose={handleClose}
+        confirmDeleteUser={confirmDeleteUser}
+        dataModal={dataModal}
+      />
+      <ModalUser
+        show={isShowModalUser}
+        onHide={onHideModalUser}
+        action={actionModalUser}
+        dataModalUser={dataModalUser}
+      />
     </>
   );
 };

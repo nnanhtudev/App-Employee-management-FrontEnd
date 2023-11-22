@@ -1,29 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import "./Nav.scss";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
+import { Redirect, useLocation } from "react-router-dom/cjs/react-router-dom.min";
 const Nav = (props) => {
-  const [isShow, setIsShow] = useState(true)
-  let location = useLocation();
-  useEffect(()=>{
-    let session = sessionStorage.getItem('account')
-    if(location.pathname === '/login' || !session) {
-      setIsShow(false)
-    }
-  }, [])
-  return (
-    <>
-  {isShow === true && 
-    <div className="topnav">
-      <NavLink to="/" exact>
-        Home
-      </NavLink>
-      <NavLink to="/users">Users</NavLink>
-      <NavLink to="/project">project</NavLink>
-    </div>
+  const { user } = useContext(UserContext);
+  const location = useLocation();
+  if ((user && user.isAuthenticated === true) || location.pathname === "/") {
+    return (
+      <>
+        <div className="topnav">
+          <NavLink to="/" exact>
+            Home
+          </NavLink>
+          <NavLink to="/users">Users</NavLink>
+          <NavLink to="/project">Project</NavLink>
+        </div>
+      </>
+    );
+  } else {
+    return <></>;
   }
-    </>
-  );
 };
 
 export default Nav;

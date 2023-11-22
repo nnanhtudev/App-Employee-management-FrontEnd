@@ -1,37 +1,53 @@
-import axios from "../config/axios"
+import axios from "../config/axios";
 
 const registerNewUser = (email, phone, username, password) => {
   return axios.post("/v1/register", {
-    email, phone, username, password
-  })
-}
+    email,
+    phone,
+    username,
+    password,
+  });
+};
 
 const loginUser = (valueLogin, password) => {
-  return axios.post('/v1/login', { valueLogin, password })
-}
+  return axios.post("/v1/login", { valueLogin, password });
+};
 
 const fetchAllUsers = (page, limit) => {
-  return axios.get(`/v1/user/read?page=${page}&limit=${limit}`)
-}
+  return axios.get(`/v1/user/read?page=${page}&limit=${limit}`);
+};
 
 const deleteUser = (user) => {
   return axios.delete(`/v1/user/delete`, {
     data: {
-      id: user.id
-    }
-  })
-}
+      id: user.id,
+    },
+  });
+};
 
 const fetchGroup = () => {
-  return axios.get(`/v1/group/read`)
-}
+  return axios.get(`/v1/group/read`);
+};
 
 const createNewUser = (userData) => {
-  return axios.post(`/v1/user/create`, { ...userData })
-}
+  return axios.post(`/v1/user/create`, { ...userData });
+};
 
 const updateCurrentUser = (userData) => {
-  return axios.put(`/v1/user/update`, { ...userData })
-}
+  return axios.put(`/v1/user/update`, { ...userData });
+};
 
-export { registerNewUser, loginUser, fetchAllUsers, deleteUser, fetchGroup, createNewUser, updateCurrentUser } 
+const getUserAccount = () => {
+  return axios.get(`/v1/account`);
+};
+
+export {
+  registerNewUser,
+  loginUser,
+  fetchAllUsers,
+  deleteUser,
+  fetchGroup,
+  createNewUser,
+  updateCurrentUser,
+  getUserAccount,
+};

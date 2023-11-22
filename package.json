@@ -12,6 +12,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
+    "react-loader-spinner": "5.4.5",
     "react-paginate": "^8.2.0",
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
@@ -19,7 +20,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "set PORT=3010 && react-scripts start",
+    "dev": "set PORT=3010 && react-scripts start --no-client-overlay",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
