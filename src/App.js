@@ -2,7 +2,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useContext, useEffect, useState } from "react";
-import Nav from "./components/Navigation/Nav";
+import NavHeader from "./components/Navigation/NavHeader";
 import AppRoutes from "./routes/AppRoutes";
 import { InfinitySpin } from "react-loader-spinner";
 import { UserContext } from "./context/UserContext";
@@ -23,7 +23,7 @@ const App = () => {
         ) : (
           <>
             <div className="header-container">
-              <Nav />
+              <NavHeader />
             </div>
             <div className="app-container">
               <AppRoutes />

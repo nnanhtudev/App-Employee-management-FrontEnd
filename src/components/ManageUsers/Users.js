@@ -20,7 +20,7 @@ const Users = (props) => {
   useEffect(() => {
     fetchUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  });
+  }, []);
   // const fetchUsers = async (page)
   const fetchUsers = async () => {
     // let response = await fetchAllUsers(page ? page : currentPage, currentLimit);

@@ -40,7 +40,7 @@ const Login = (props) => {
         token,
         account: { groupWithRoles, email, username },
       };
-      sessionStorage.setItem("account", JSON.stringify(data));
+      localStorage.setItem("jwt", token);
       loginContext(data);
       toast.success("Successfully logged in");
       history.push("/users");

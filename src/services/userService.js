@@ -41,6 +41,9 @@ const getUserAccount = () => {
   return axios.get(`/v1/account`);
 };
 
+const logoutUser = () => {
+  return axios.post(`/v1/logout`);
+};
 export {
   registerNewUser,
   loginUser,
@@ -50,4 +53,5 @@ export {
   createNewUser,
   updateCurrentUser,
   getUserAccount,
+  logoutUser,
 };
