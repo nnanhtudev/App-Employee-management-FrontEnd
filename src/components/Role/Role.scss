@@ -2,7 +2,9 @@
   i.fa.fa-plus {
     color: white;
   }
-  .btn {
+  .btn-success,
+  .btn-danger {
     margin-right: 5px;
+    border-radius: 50%;
   }
 }

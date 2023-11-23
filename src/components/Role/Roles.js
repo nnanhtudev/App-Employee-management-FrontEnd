@@ -3,28 +3,73 @@ import "./Role.scss";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { createRoles } from "../../services/roleService";
+
 const Role = (props) => {
+  const defaultChild = { url: "", description: "", isValidUrl: true };
+
   const [listChild, setListChild] = useState({
-    child1: { url: "", description: "" },
+    child1: defaultChild,
   });
-  useEffect(() => {}, []);
+
   const handleOnchangeInput = (name, value, key) => {
     let _listChild = _.cloneDeep(listChild);
     _listChild[key][name] = value;
+    if (value && name === "url") {
+      _listChild[key]["isValidUrl"] = true;
+    }
     setListChild(_listChild);
   };
+
   const handleAddNewChild = () => {
     let _listChild = _.cloneDeep(listChild);
-    _listChild[`child-${uuidv4()}`] = {
-      url: "",
-      description: "",
-    };
+    _listChild[`child-${uuidv4()}`] = defaultChild;
     setListChild(_listChild);
   };
+
   const handleAddDeleteChild = (key) => {
     let _listChild = _.cloneDeep(listChild);
     delete _listChild[key];
     setListChild(_listChild);
+  };
+
+  const buildDataToPersist = () => {
+    let _listChild = _.cloneDeep(listChild);
+    let results = [];
+    Object.entries(_listChild).map(([key, child], index) => {
+      results.push({
+        url: child.url,
+        description: child.description,
+      });
+    });
+    return results;
+  };
+  const handleSave = async () => {
+    let invalidObj = Object.entries(listChild).find(([key, child], index) => {
+      return child && !child.url;
+    });
+
+    if (!invalidObj) {
+      let data = buildDataToPersist();
+      let res = await createRoles(data);
+      if (res && +res.EC === 0) {
+        toast.success(res.EM);
+        setListChild(defaultChild);
+      }
+      if (+res.EC === -1) {
+        toast.error(res.EM);
+      } else {
+        toast.error(res.EM);
+      }
+    } else {
+      // error
+      toast.error("Input url must not be empty...");
+      let _listChild = _.cloneDeep(listChild);
+      let key = invalidObj[0];
+      _listChild[key]["isValidUrl"] = false;
+      setListChild(_listChild);
+    }
   };
   return (
     <>
@@ -42,7 +87,7 @@ const Role = (props) => {
                       <label>URL:</label>
                       <input
                         type="text"
-                        className="form-control"
+                        className={child.isValidUrl ? "form-control" : "form-control is-invalid"}
                         value={child.url}
                         onChange={(event) => handleOnchangeInput("url", event.target.value, key)}
                       />
@@ -72,7 +117,9 @@ const Role = (props) => {
                 // Just to clarify: unlike object destructuring, the parameter names don't matter here.
               })}
               <div className="mt-3">
-                <button className="btn btn-primary">Save</button>
+                <button className="btn btn-primary" onClick={() => handleSave()}>
+                  Save
+                </button>
               </div>
             </div>
           </div>
