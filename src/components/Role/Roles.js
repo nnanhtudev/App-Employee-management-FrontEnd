@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./Role.scss";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { createRoles } from "../../services/roleService";
+import TableRole from "../Role/TableRole";
 
 const Role = (props) => {
   const defaultChild = { url: "", description: "", isValidUrl: true };
-
+  const childRef = useRef();
   const [listChild, setListChild] = useState({
     child1: defaultChild,
   });
@@ -23,6 +24,7 @@ const Role = (props) => {
   };
 
   const handleAddNewChild = () => {
+    console.log("add new child");
     let _listChild = _.cloneDeep(listChild);
     _listChild[`child-${uuidv4()}`] = defaultChild;
     setListChild(_listChild);
@@ -55,7 +57,8 @@ const Role = (props) => {
       let res = await createRoles(data);
       if (res && +res.EC === 0) {
         toast.success(res.EM);
-        setListChild(defaultChild);
+        setListChild({ child1: defaultChild });
+        childRef.current.fetchListRolesAgain();
       }
       if (+res.EC === -1) {
         toast.error(res.EM);
@@ -75,7 +78,7 @@ const Role = (props) => {
     <>
       <div className="role-container">
         <div className="container">
-          <div className="mt-3">
+          <div className="adding-role mt-3">
             <div className="title-role">
               <h4>Add a new Role</h4>
             </div>
@@ -117,11 +120,16 @@ const Role = (props) => {
                 // Just to clarify: unlike object destructuring, the parameter names don't matter here.
               })}
               <div className="mt-3">
-                <button className="btn btn-primary" onClick={() => handleSave()}>
+                <button className="btn btn-warning" onClick={() => handleSave()}>
                   Save
                 </button>
               </div>
             </div>
+          </div>
+          <hr />
+          <div className="mt-3">
+            <h4>List Current Role</h4>
+            <TableRole ref={childRef} />
           </div>
         </div>
       </div>
