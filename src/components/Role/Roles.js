@@ -59,9 +59,6 @@ const Role = (props) => {
         toast.success(res.EM);
         setListChild({ child1: defaultChild });
         childRef.current.fetchListRolesAgain();
-      }
-      if (+res.EC === -1) {
-        toast.error(res.EM);
       } else {
         toast.error(res.EM);
       }
